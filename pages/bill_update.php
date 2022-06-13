@@ -1,15 +1,52 @@
+<?php
+//get video info
+session_start();
+    // sending query
 
-<!--
-Used basic html and bootstrap skeleton from the below link for style purpose which contains bootstrap.css,bootstrap.js,jquery.js
-https://www.w3schools.com/bootstrap/bootstrap_get_started.asp
-Used bootstrap form elements from below link.
-https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
+include_once '../config_save.php';
+
+$sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills WHERE id_bill = '". $_GET['bill_id'] . "'";
+$result = $conn->query($sql);
+if (!$result) {
+    echo "Could not successfully run query ($sql) from DB: " . mysqli_errno();
+    exit;
+}
+
+if (mysqli_num_rows($result) == 0) {
+    echo "No rows found, nothing to print so am exiting";
+    exit;
+}
+
+// While a row of data exists, put that row in $row as an associative array
+// Note: If you're expecting just one row, no need to use a loop
+// Note: If you put extract($row); inside the following loop, you'll
+//       then create $userid, $fullname, and $userstatus
+while ($row = mysqli_fetch_assoc($result)) {
+
+
+
+
+$bill_id        = $row['id_bill'];
+$bill_name    = $row['bill_name'];
+$bill_account  = $row['bill_account'];
+$bill_due_date     = $row['bill_due_date'];
+$bill_user  = $row['bill_user'];
+$bill_website        = $row['bill_website'];
+$bill_paid_date  = $row['bill_paid_date'];
+$bill_paid_amount  = $row['bill_paid_amount'];
+$bill_notes  = $row['bill_notes'];
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
         <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
         <link rel="icon" type="image/png" href="../assets/img/favicon.png">
 
@@ -26,15 +63,8 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
         <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
         <!-- CSS Files -->
         <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
-        <!--extra-->
 
 
-    <link href="../bootstrap/css/jumbotron.css" rel="stylesheet">
-        <script src="../bootstrap/js/jquery-3.1.1.js"></script>
-
-        <script src="../bootstrap/js/bootstrap.min.js"></script>
-
-       <script src="../bootstrap/js/jquery.quicksearch.js"></script>
     </head>
 
     <body class="g-sidenav-show  bg-gray-100">
@@ -90,7 +120,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  active" href="../pages/bill_list.php">
+              <a class="nav-link " href="../pages/bill_list.php">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
@@ -109,6 +139,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                 <span class="nav-link-text ms-1">List Bills</span>
               </a>
             </li>
+
             <li class="nav-item">
               <a class="nav-link  " href="../pages/billing.html">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -129,7 +160,6 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                 <span class="nav-link-text ms-1">Billing</span>
               </a>
             </li>
-
 
             <li class="nav-item mt-3">
               <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
@@ -209,9 +239,9 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">List Bills</li>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit Bill</li>
               </ol>
-              <h6 class="font-weight-bolder mb-0">List Bills</h6>
+              <h6 class="font-weight-bolder mb-0">Edit Bill</h6>
             </nav>
             <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
               <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -258,226 +288,177 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
 
 <!--CONTENT -->
 
-      <div class="container-fluid py-4">
-        <div class="row">
-          <div class="col-12">
-            <div class="card mb-4">
-              <div class="card-header pb-0">
-                <h6>List Bills</h6>
-              </div>
-
-    <div class="card-body px-1 pt-1 pb-2">
-
-
-
-
-                            <div class="form-group input-group">
-
-                              <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-
-                              <input name="query" id="txt_query" placeholder="Search" type="text" class="form-control">
-
-                            </div>
-
-
-
-                            <table id="table" class="table table-hover">
-
-                             <thead>
-
-                                 <tr>
-
-                                     <th>Id</th>
-                                     <th>Bill Name</th>
-                                     <th>Bill Account #</th>
-                                     <th>Bill User</th>
-                                     <th>Bill Website</th>
-                                     <th>Bill Due Date</th>
-                                     <th>
-                                       Last Paid Amount
-                                     </th>
-                                     <Th>
-                                       Last Paid Date
-                                     </Th>
-                                 <th>
-                                   Bill Notes
-                                 </th>
-                                 <th>
-                                   Edit
-                                 </th>
-
-
-                                 </tr>
-
-                             </thead>
-
-                            <tbody><tr>
-                              <?php
-
-include_once '../config_save.php';
-
-                        //      $result = mysqli_query($conn,"SELECT * FROM default_bills");
-          $sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills";
-
-          $result = $conn->query($sql);
-
-
-
-          if ($result->num_rows > 0) {
-
-              // output data of each row
-
-              while($row = $result->fetch_assoc()) {
-
-
-                                        $bill_id        = $row['id_bill'];
-                                        $bill_name    = $row['bill_name'];
-                                        $bill_account  = $row['bill_account'];
-                                        $bill_due_date     = $row['bill_due_date'];
-                                        $bill_user  = $row['bill_user'];
-                                        $bill_website        = $row['bill_website'];
-                                        $bill_paid_date  = $row['bill_paid_date'];
-                                        $bill_paid_amount  = $row['bill_paid_amount'];
-                                        $bill_notes  = $row['bill_notes'];
-
-
-                                        echo    "<th>".$bill_id."</th>";
-                                        echo    "<td>".$bill_name."</td>";
-                                        echo    "<td>".$bill_account."</td>";
-                                        echo    "<td>".$bill_user."</td>";
-                                        echo    "<td>".$bill_website."</td>";
-                                        echo    "<td>".$bill_due_date."</td>";
-                                        echo	 "<td>".$bill_paid_amount."</td>";
-                                        echo	 "<td>".$bill_paid_date."</td>";
-                                        echo    "<td>".$bill_notes."</td>";
-                                        echo "<td><a href='bill_update.php?bill_id=".$bill_id."'class='btn btn-primary' role='button'>edit</a></td></tr>";
-                                }
-
-                            } else {
-
-                                echo "0 results";
-
-                            }
-
-
-
-                            $conn->close();
-
-                            ?>
-
-                             </tbody>
-
-                            </table>
-
-
-
-
-
-                </div>
-            </div>
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-header pb-0">
+          <h6>Edit Bill Information</h6>
         </div>
 
-        <!--END CONTENT -->
-        <footer class="footer pt-3  ">
-          <div class="container-fluid">
-            <div class="row align-items-center justify-content-lg-between">
-              <div class="col-lg-6 mb-lg-0 mb-4">
-                <div class="copyright text-center text-sm text-muted text-lg-start">
-                  © <script>
-                    document.write(new Date().getFullYear())
-                  </script>,
-                  made with <i class="fa fa-heart"></i> by
-                  <a href="https://schellschockmedia.com" class="font-weight-bold" target="_blank">SchellSchock Media</a>
-                  for a better web.
-                </div>
+<div class="card-body px-1 pt-1 pb-2">
+              <form method="post" action="../bill_save.php">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                <label for="bname">Bill Name</label>
+                <input type="text" class="form-control" name="bname" id="bname" value="<?php echo $row['bill_name'];?>" placeholder="Bill Name">
               </div>
 
-            </div>
+                  <div class="col-sm">
+                <label for="accountnumber">Account Number</label>
+                <input type="text" class="form-control" name="accountnumber" value="<?php echo $row['bill_account'];?>" placeholder="Account Number">
+              </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm">
+                <label for="buser">User Name</label>
+                <input type="text" class="form-control" name="buser" value="<?php echo $row['bill_user'];?>" placeholder="User Name">
+              </div>
+
+              <div class="col-sm">
+              <label for="bdate">Due Date</label>
+              <select class="form-control" name="bdate">
+                <option value = "1">1st</option>
+                <option value = "15">15th</option>
+                <option value selected = "<?php echo $row['bill_due_date'];?>"><?php echo $row['bill_due_date'];?></option>
+
+              </select>
+
+              </div>
+              <div class="form-group">
+                <label for="bwebsite">Website Address</label>
+                <input type="text" class="form-control" name="bwebsite" value="<?php echo $row['bill_website'];?>" placeholder=http://billwebsite.com>
+              </div>
+
+
+              <div class="form-group">
+                <label for="bnotes">Notes</label>
+                <textarea class="form-control" name="bnotes" v rows="3"><?php echo $row['bill_notes'];?></textarea>
+              </div>
+
+              </div>
+              <?php if (isset($_SESSION['success_message']) && !empty($_SESSION['success_message'])) { ?>
+                      <div class="alert alert-success" role="alert"><?php echo $_SESSION['success_message']; ?></div>
+                        <?php
+                        unset($_SESSION['success_message']);
+                    }
+                    ?>
+                  <div class="form-group">
+                      <input type="submit" class="btn btn-primary" name="save" value="Save"/>
+                  </div>
+              </form>
+
           </div>
-        </footer>
       </div>
-    </main>
-    <div class="fixed-plugin">
-      <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-        <i class="fa fa-cog py-2"> </i>
-      </a>
-      <div class="card shadow-lg ">
-        <div class="card-header pb-0 pt-3 ">
-          <div class="float-start">
-            <h5 class="mt-3 mb-0">Monthly Bill Configurator</h5>
-            <p>See our dashboard options.</p>
-          </div>
-          <div class="float-end mt-4">
-            <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-              <i class="fa fa-close"></i>
-            </button>
-          </div>
-          <!-- End Toggle Button -->
-        </div>
-        <hr class="horizontal dark my-1">
-        <div class="card-body pt-sm-3 pt-0">
-          <!-- Sidebar Backgrounds -->
-          <div>
-            <h6 class="mb-0">Sidebar Colors</h6>
-          </div>
-          <a href="javascript:void(0)" class="switch-trigger background-color">
-            <div class="badge-colors my-2 text-start">
-              <span class="badge filter bg-gradient-primary active" data-color="primary" onclick="sidebarColor(this)"></span>
-              <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
-              <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
-              <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
-              <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
-              <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
-            </div>
-          </a>
-          <!-- Sidenav Type -->
-          <div class="mt-3">
-            <h6 class="mb-0">Sidenav Type</h6>
-            <p class="text-sm">Choose between 2 different sidenav types.</p>
-          </div>
-          <div class="d-flex">
-            <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
-            <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
-          </div>
-          <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
-          <!-- Navbar Fixed -->
-          <div class="mt-3">
-            <h6 class="mb-0">Navbar Fixed</h6>
-          </div>
-          <div class="form-check form-switch ps-0">
-            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
-          </div>
-          <hr class="horizontal dark my-sm-4">
+  </div>
 
+          <!--END CONTENT -->
+          <footer class="footer pt-3  ">
+            <div class="container-fluid">
+              <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-6 mb-lg-0 mb-4">
+                  <div class="copyright text-center text-sm text-muted text-lg-start">
+                    © <script>
+                      document.write(new Date().getFullYear())
+                    </script>,
+                    made with <i class="fa fa-heart"></i> by
+                    <a href="https://schellschockmedia.com" class="font-weight-bold" target="_blank">SchellSchock Media</a>
+                    for a better web.
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </footer>
+        </div>
+      </main>
+      <div class="fixed-plugin">
+        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+          <i class="fa fa-cog py-2"> </i>
+        </a>
+        <div class="card shadow-lg ">
+          <div class="card-header pb-0 pt-3 ">
+            <div class="float-start">
+              <h5 class="mt-3 mb-0">Monthly Bill Configurator</h5>
+              <p>See our dashboard options.</p>
+            </div>
+            <div class="float-end mt-4">
+              <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+                <i class="fa fa-close"></i>
+              </button>
+            </div>
+            <!-- End Toggle Button -->
+          </div>
+          <hr class="horizontal dark my-1">
+          <div class="card-body pt-sm-3 pt-0">
+            <!-- Sidebar Backgrounds -->
+            <div>
+              <h6 class="mb-0">Sidebar Colors</h6>
+            </div>
+            <a href="javascript:void(0)" class="switch-trigger background-color">
+              <div class="badge-colors my-2 text-start">
+                <span class="badge filter bg-gradient-primary active" data-color="primary" onclick="sidebarColor(this)"></span>
+                <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
+                <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+                <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+                <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+                <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+              </div>
+            </a>
+            <!-- Sidenav Type -->
+            <div class="mt-3">
+              <h6 class="mb-0">Sidenav Type</h6>
+              <p class="text-sm">Choose between 2 different sidenav types.</p>
+            </div>
+            <div class="d-flex">
+              <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
+              <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
+            </div>
+            <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
+            <!-- Navbar Fixed -->
+            <div class="mt-3">
+              <h6 class="mb-0">Navbar Fixed</h6>
+            </div>
+            <div class="form-check form-switch ps-0">
+              <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
+            </div>
+            <hr class="horizontal dark my-sm-4">
+
+            </div>
           </div>
         </div>
       </div>
-    </div>
-        <script src="../assets/js/core/popper.min.js"></script>
-        <script src="../assets/js/core/bootstrap.min.js"></script>
-        <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-        <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-        <script>
-          var win = navigator.platform.indexOf('Win') > -1;
-          if (win && document.querySelector('#sidenav-scrollbar')) {
-            var options = {
-              damping: '0.5'
+          <script src="../assets/js/core/popper.min.js"></script>
+          <script src="../assets/js/core/bootstrap.min.js"></script>
+          <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+          <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+          <script>
+            var win = navigator.platform.indexOf('Win') > -1;
+            if (win && document.querySelector('#sidenav-scrollbar')) {
+              var options = {
+                damping: '0.5'
+              }
+              Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
             }
-            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-          }
-        </script>
-        <!-- Github buttons -->
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
-        <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-        <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
+          </script>
+          <!-- Github buttons -->
+          <script async defer src="https://buttons.github.io/buttons.js"></script>
+          <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+          <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
+
+
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      </body>
+  </html>
 
 
 
-<!--- script for the sexy search --->
-        <script>
 
-  $('input#txt_query').quicksearch('table#table tbody tr');
+<?php }
 
-</script>
-    </body>
-</html>
+mysqli_free_result($result);
+
+?>
