@@ -1,4 +1,41 @@
-<?php session_start(); ?>
+<?php
+session_start();
+include_once '../config_save.php';
+
+
+
+
+
+    if (isset($_POST['generatereport'])) {
+
+        $year = ($_POST['year']);
+        $month = ($_POST['month']);
+
+
+          $sql2 = "SELECT * FROM history WHERE Year = '".$year."' AND Month  ='".$month."'";
+         $result = $conn->query($sql2);
+          while ($row = mysqli_fetch_assoc($result)) {
+
+
+
+      $obill_id        = $row['id_bill'];
+      $hbill_id        = $row['b_id'];
+      $bill_name       = $row['bill_name'];
+      $bill_date       = $row['bill_date'];
+      $bill_paid_date  = $row['bill_paid_date'];
+      $bill_paid_amount= $row['bill_paid_amount'];
+      $bill_notes      = $row['bill_notes'];
+      $bill_year       = $row['year'];
+      $bill_month      = $row['month'];
+
+
+
+}
+
+}
+?>
+
+
 <!--
 Used basic html and bootstrap skeleton from the below link for style purpose which contains bootstrap.css,bootstrap.js,jquery.js
 https://www.w3schools.com/bootstrap/bootstrap_get_started.asp
@@ -9,7 +46,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
     <head>
        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
         <link rel="icon" type="image/png" href="../assets/img/favicon.png">
 
@@ -26,8 +63,15 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
         <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
         <!-- CSS Files -->
         <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
+        <!--extra-->
 
 
+    <link href="../bootstrap/css/jumbotron.css" rel="stylesheet">
+        <script src="../bootstrap/js/jquery-3.1.1.js"></script>
+
+        <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+       <script src="../bootstrap/js/jquery.quicksearch.js"></script>
     </head>
 
     <body class="g-sidenav-show  bg-gray-100">
@@ -63,7 +107,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  active" href="../pages/tables.html">
+              <a class="nav-link  " href="../pages/bill_add.php">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
@@ -83,7 +127,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  " href="../pages/bills_add_monthly.php">
+              <a class="nav-link " href="../pages/bills_add_monthly.php">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
@@ -103,7 +147,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="../pages/bill_list.php">
+              <a class="nav-link" href="../pages/bill_list.php">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
@@ -122,7 +166,6 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                 <span class="nav-link-text ms-1">List Bills</span>
               </a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link  " href="../pages/billing.html">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -143,6 +186,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                 <span class="nav-link-text ms-1">Billing</span>
               </a>
             </li>
+
 
             <li class="nav-item mt-3">
               <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
@@ -222,9 +266,9 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Add Bill</li>
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><?php echo $year."";?></li>
               </ol>
-              <h6 class="font-weight-bolder mb-0">Add Bill</h6>
+              <h6 class="font-weight-bolder mb-0"><?php echo $month. ", "; echo $year."";?></h6>
             </nav>
             <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
               <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -276,61 +320,115 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
           <div class="col-12">
             <div class="card mb-4">
               <div class="card-header pb-0">
-                <h6>Add Bill</h6>
+                <h6><?php echo $month. ", "; echo $year." ";?>Bills</h6>
               </div>
 
     <div class="card-body px-1 pt-1 pb-2">
-                    <form method="post" action="../bill_save.php">
-                      <div class="container">
-                        <div class="row">
-                          <div class="col-sm">
-                      <label for="bname">Bill Name</label>
-                      <input type="text" class="form-control" name="bname" id="bname" placeholder="Bill Name">
-                    </div>
-
-                        <div class="col-sm">
-                      <label for="accountnumber">Account Number</label>
-                      <input type="text" class="form-control" name="accountnumber" placeholder="Account Number">
-                    </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-sm">
-                      <label for="buser">User Name</label>
-                      <input type="text" class="form-control" name="buser" placeholder="User Name">
-                    </div>
-
-                    <div class="col-sm">
-                    <label for="bdate">Due Date</label>
-                    <select class="form-control" name="bdate">
-                      <option value = "1st">1st</option>
-                      <option value = "15th">15th</option>
-
-                    </select>
-
-                    </div>
-                    <div class="form-group">
-                      <label for="bwebsite">Website Address</label>
-                      <input type="text" class="form-control" name="bwebsite" placeholder=http://billwebsite.com>
-                    </div>
 
 
-                    <div class="form-group">
-                      <label for="bnotes">Notes</label>
-                      <textarea class="form-control" name="bnotes" rows="3"></textarea>
-                    </div>
 
-                    </div>
-                    <?php if (isset($_SESSION['success_message']) && !empty($_SESSION['success_message'])) { ?>
-                            <div class="alert alert-success" role="alert"><?php echo $_SESSION['success_message']; ?></div>
+
+                            <div class="form-group input-group">
+
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+
+                              <input name="query" id="txt_query" placeholder="Search" type="text" class="form-control">
+
+                            </div>
+
+
+
+                            <table id="table" class="table table-hover">
+
+                             <thead>
+
+                                 <tr>
+
+                                     <th>Id</th>
+                                     <th>Bill Name</th>
+                                     <th>Bill Account #</th>
+                                     <th>Bill User</th>
+                                     <th>Bill Website</th>
+                                     <th>Bill Due Date</th>
+                                     <th>
+                                       Last Paid Amount
+                                     </th>
+                                     <Th>
+                                       Last Paid Date
+                                     </Th>
+                                 <th>
+                                   Bill Notes
+                                 </th>
+                                 <th>
+                                   Pay
+                                 </th>
+
+
+                                 </tr>
+
+                             </thead>
+
+                            <tbody><tr>
                               <?php
-                              unset($_SESSION['success_message']);
-                          }
-                          ?>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary" name="save" value="Save"/>
-                        </div>
-                    </form>
+
+include_once '../config_save.php';
+
+                        //      $result = mysqli_query($conn,"SELECT * FROM default_bills");
+          $sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills";
+
+          $result = $conn->query($sql);
+
+
+
+          if ($result->num_rows > 0) {
+
+              // output data of each row
+
+              while($row = $result->fetch_assoc()) {
+
+
+                                        $bill_id        = $row['id_bill'];
+                                        $bill_name    = $row['bill_name'];
+                                        $bill_account  = $row['bill_account'];
+                                        $bill_due_date     = $row['bill_due_date'];
+                                        $bill_user  = $row['bill_user'];
+                                        $bill_website        = $row['bill_website'];
+                                        $bill_paid_date  = $row['bill_paid_date'];
+                                        $bill_paid_amount  = $row['bill_paid_amount'];
+                                        $bill_notes  = $row['bill_notes'];
+
+
+                                        echo    "<th>".$bill_id."</th>";
+                                        echo    "<td>".$bill_name."</td>";
+                                        echo    "<td>".$bill_account."</td>";
+                                        echo    "<td>".$bill_user."</td>";
+                                        echo    "<td>".$bill_website."</td>";
+                                        echo    "<td>".$bill_due_date."</td>";
+                                        echo	 "<td>".$bill_paid_amount."</td>";
+                                        echo	 "<td>".$bill_paid_date."</td>";
+                                        echo    "<td>".$bill_notes."</td>";
+                                        echo "<td><a href='bill_update.php?bill_id=".$bill_id."'class='btn btn-primary' role='button'>Pay</a></td></tr>";
+                                }
+
+                            } else {
+
+                                echo "0 results";
+
+                            }
+
+
+
+                            $conn->close();
+
+                            ?>
+
+                             </tbody>
+
+                            </table>
+
+
+
+
 
                 </div>
             </div>
@@ -431,7 +529,12 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
         <script src="../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
 
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!--- script for the sexy search --->
+        <script>
+
+  $('input#txt_query').quicksearch('table#table tbody tr');
+
+</script>
     </body>
 </html>
