@@ -8,7 +8,7 @@ if (isset($_POST['bname'])) {
     $due = mysqli_real_escape_string($conn, $_POST['bdate']);
     $website = mysqli_real_escape_string($conn, $_POST['bwebsite']);
     $notes = mysqli_real_escape_string($conn, $_POST['bnotes']);
-    mysqli_query($conn, "INSERT INTO default_bills(bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date) VALUES ('$name','$due','$website','$account','$user','$notes','19000101')");
+    mysqli_query($conn, "INSERT INTO default_bills(bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount) VALUES ('$name','$due','$website','$account','$user','$notes','19000101', '0')");
 
     //Start the session if already not started.
     session_start();

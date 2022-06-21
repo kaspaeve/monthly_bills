@@ -1,40 +1,10 @@
 <?php
-session_start();
-include_once '../config_save.php';
+if (isset($_POST['generatereport'])) {
 
-
-
-
-
-    if (isset($_POST['generatereport'])) {
-
-        $year = ($_POST['year']);
-        $month = ($_POST['month']);
-
-
-          $sql2 = "SELECT * FROM history WHERE Year = '".$year."' AND Month  ='".$month."'";
-         $result = $conn->query($sql2);
-          while ($row = mysqli_fetch_assoc($result)) {
-
-
-
-      $obill_id        = $row['id_bill'];
-      $hbill_id        = $row['b_id'];
-      $bill_name       = $row['bill_name'];
-      $bill_date       = $row['bill_date'];
-      $bill_paid_date  = $row['bill_paid_date'];
-      $bill_paid_amount= $row['bill_paid_amount'];
-      $bill_notes      = $row['bill_notes'];
-      $bill_year       = $row['year'];
-      $bill_month      = $row['month'];
-
-
-
-}
-
-}
-?>
-
+    $year = ($_POST['year']);
+    $month = ($_POST['month']);
+  }
+  ?>
 
 <!--
 Used basic html and bootstrap skeleton from the below link for style purpose which contains bootstrap.css,bootstrap.js,jquery.js
@@ -65,6 +35,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
         <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
         <!--extra-->
 
+<link href="../bootstrap/css/modal.css" rel="stylesheet">
 
     <link href="../bootstrap/css/jumbotron.css" rel="stylesheet">
         <script src="../bootstrap/js/jquery-3.1.1.js"></script>
@@ -72,6 +43,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
         <script src="../bootstrap/js/bootstrap.min.js"></script>
 
        <script src="../bootstrap/js/jquery.quicksearch.js"></script>
+
     </head>
 
     <body class="g-sidenav-show  bg-gray-100">
@@ -315,6 +287,10 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
 
 <!--CONTENT -->
 
+
+
+
+
       <div class="container-fluid py-4">
         <div class="row">
           <div class="col-12">
@@ -346,9 +322,9 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
 
                                      <th>Id</th>
                                      <th>Bill Name</th>
-                                     <th>Bill Account #</th>
+                                <!--     <th>Bill Account #</th>
                                      <th>Bill User</th>
-                                     <th>Bill Website</th>
+                                     <th>Bill Website</th> -->
                                      <th>Bill Due Date</th>
                                      <th>
                                        Last Paid Amount
@@ -370,11 +346,26 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
 
                             <tbody><tr>
                               <?php
-
+session_start();
 include_once '../config_save.php';
 
+
+
+
+
+    if (isset($_POST['generatereport'])) {
+
+        $year = ($_POST['year']);
+        $month = ($_POST['month']);
+
+
+          $sql = "SELECT * FROM history WHERE Year = '".$year."' AND Month  ='".$month."'";
+         $result = $conn->query($sql);
+      //    while ($row = mysqli_fetch_assoc($result)) {
+
+
                         //      $result = mysqli_query($conn,"SELECT * FROM default_bills");
-          $sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills";
+    //      $sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills";
 
           $result = $conn->query($sql);
 
@@ -386,13 +377,13 @@ include_once '../config_save.php';
 
               while($row = $result->fetch_assoc()) {
 
-
+                                        $obill_id        = $row['b_id'];
                                         $bill_id        = $row['id_bill'];
                                         $bill_name    = $row['bill_name'];
-                                        $bill_account  = $row['bill_account'];
-                                        $bill_due_date     = $row['bill_due_date'];
-                                        $bill_user  = $row['bill_user'];
-                                        $bill_website        = $row['bill_website'];
+                                      //  $bill_account  = $row['bill_account'];
+                                        $bill_due_date     = $row['bill_date'];
+                                      //  $bill_user  = $row['bill_user'];
+                                      //  $bill_website        = $row['bill_website'];
                                         $bill_paid_date  = $row['bill_paid_date'];
                                         $bill_paid_amount  = $row['bill_paid_amount'];
                                         $bill_notes  = $row['bill_notes'];
@@ -400,14 +391,16 @@ include_once '../config_save.php';
 
                                         echo    "<th>".$bill_id."</th>";
                                         echo    "<td>".$bill_name."</td>";
-                                        echo    "<td>".$bill_account."</td>";
-                                        echo    "<td>".$bill_user."</td>";
-                                        echo    "<td>".$bill_website."</td>";
+                                  //      echo    "<td>".$bill_account."</td>";
+                                    //    echo    "<td>".$bill_user."</td>";
+                                    //    echo    "<td>".$bill_website."</td>";
                                         echo    "<td>".$bill_due_date."</td>";
                                         echo	 "<td>".$bill_paid_amount."</td>";
                                         echo	 "<td>".$bill_paid_date."</td>";
                                         echo    "<td>".$bill_notes."</td>";
-                                        echo "<td><a href='bill_update.php?bill_id=".$bill_id."'class='btn btn-primary' role='button'>Pay</a></td></tr>";
+                                        echo "<td>'<button id= 'myBtn".$bill_id."' class='btn btn-primary' role='button'>Pay</a></td></tr>";
+
+
                                 }
 
                             } else {
@@ -419,7 +412,7 @@ include_once '../config_save.php';
 
 
                             $conn->close();
-
+}
                             ?>
 
                              </tbody>
@@ -433,6 +426,116 @@ include_once '../config_save.php';
                 </div>
             </div>
         </div>
+<!-- test-->
+
+<!-- The Modal -->
+<div id="myModal<?php echo $info['itemID']; ?>" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6>Edit Bill Information <?php echo    "".$bill_id."";?></h6>
+            </div>
+
+    <div class="card-body px-1 pt-1 pb-2">
+                  <form method="post" action="../bill_save.php">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                    <label for="bname">Bill Name</label>
+                    <input type="text" class="form-control" name="bname" id="bname" value="<?php echo $row['bill_name'];?>" placeholder="Bill Name">
+                  </div>
+
+                      <div class="col-sm">
+                    <label for="accountnumber">Account Number</label>
+                    <input type="text" class="form-control" name="accountnumber" value="<?php echo $row['bill_account'];?>" placeholder="Account Number">
+                  </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm">
+                    <label for="buser">User Name</label>
+                    <input type="text" class="form-control" name="buser" value="<?php echo $row['bill_user'];?>" placeholder="User Name">
+                  </div>
+
+                  <div class="col-sm">
+                  <label for="bdate">Due Date</label>
+                  <select class="form-control" name="bdate">
+                    <option value = "1st">1st</option>
+                    <option value = "15th">15th</option>
+                    <option value selected = "<?php echo $row['bill_due_date'];?>"><?php echo $row['bill_due_date'];?></option>
+
+                  </select>
+
+                  </div>
+                  <div class="form-group">
+                    <label for="bwebsite">Website Address</label>
+                    <input type="text" class="form-control" name="bwebsite" value="<?php echo $row['bill_website'];?>" placeholder=http://billwebsite.com>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label for="bnotes">Notes</label>
+                    <textarea class="form-control" name="bnotes" v rows="3"><?php echo $row['bill_notes'];?></textarea>
+                  </div>
+
+                  </div>
+                  <?php if (isset($_SESSION['success_message']) && !empty($_SESSION['success_message'])) { ?>
+                          <div class="alert alert-success" role="alert"><?php echo $_SESSION['success_message']; ?></div>
+                            <?php
+                            unset($_SESSION['success_message']);
+                        }
+                        ?>
+                      <div class="form-group">
+                          <input type="submit" class="btn btn-primary" name="save" value="Save"/>
+                      </div>
+                  </form>
+
+              </div>
+          </div>
+      </div>
+
+
+  </div>
+<!--end of content -->
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+<!-- test-->
+
+
 
         <!--END CONTENT -->
         <footer class="footer pt-3  ">
