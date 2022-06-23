@@ -12,6 +12,7 @@ https://www.w3schools.com/bootstrap/bootstrap_get_started.asp
 Used bootstrap form elements from below link.
 https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
 <!DOCTYPE html>
+
 <html lang="en">
     <head>
        <meta charset="utf-8">
@@ -35,7 +36,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
         <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.6" rel="stylesheet" />
         <!--extra-->
 
-<link href="../bootstrap/css/modal.css" rel="stylesheet">
+
 
     <link href="../bootstrap/css/jumbotron.css" rel="stylesheet">
         <script src="../bootstrap/js/jquery-3.1.1.js"></script>
@@ -398,10 +399,211 @@ include_once '../config_save.php';
                                         echo	 "<td>".$bill_paid_amount."</td>";
                                         echo	 "<td>".$bill_paid_date."</td>";
                                         echo    "<td>".$bill_notes."</td>";
-                                        echo "<td>'<button id= 'myBtn".$bill_id."' class='btn btn-primary' role='button'>Pay</a></td></tr>";
+                                      //  echo "<td><a href='myBtn".$bill_id."'class='btn btn-primary' role='button'>Pay</a></td></tr>";
 
 
-                                }
+                                        echo "<td>'<button data-toggle='modal' data-target='#myModal-".$obill_id."' class='btn btn-primary' role='button'>Pay</a></td></tr>";
+
+
+
+
+
+//  <!-- test-->
+
+
+
+
+                                $modal = array( 'modal1', 'modal2', 'modal3', 'modal4' );// Set the array
+                                $i = $bill_id; // Set the increment variable
+
+
+                                ?>
+
+
+
+                                <!-- The Modal -->
+<!--data-->
+<?php
+//get video info
+
+    // sending query
+
+
+
+$sql2 = "SELECT * FROM default_bills WHERE id_bill = '". $bill_id . "'";
+$result2 = $conn->query($sql2);
+if (!$result2) {
+    echo "Could not successfully run query ($sql2) from DB: " . mysqli_errno();
+    exit;
+}
+
+if (mysqli_num_rows($result2) == 0) {
+    echo "No rows found, nothing to print so am exiting";
+    exit;
+}
+
+// While a row of data exists, put that row in $row as an associative array
+// Note: If you're expecting just one row, no need to use a loop
+// Note: If you put extract($row); inside the following loop, you'll
+//       then create $userid, $fullname, and $userstatus
+while ($row2 = mysqli_fetch_assoc($result2)) {
+
+
+
+
+$bill_id2        = $row2['id_bill'];
+$bill_name2    = $row2['bill_name'];
+$bill_account2  = $row2['bill_account'];
+$bill_due_date2     = $row2['bill_due_date'];
+$bill_user2  = $row2['bill_user'];
+$bill_website2        = $row2['bill_website'];
+$bill_paid_date2  = $row2['bill_paid_date'];
+$bill_paid_amount2  = $row2['bill_paid_amount'];
+$bill_notes2  = $row2['bill_notes'];
+
+}
+
+?>
+<!--old modal -->
+                                <div class="modal" id="myModal-<?php echo $obill_id; // Displaying the increment ?>">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                      <!-- Modal Header -->
+                                      <div class="modal-header">
+                                        <h4 class="modal-title">Pay <?php echo $bill_name2; ?></h4>
+                                        <button type="button" class="close" data-dismiss="modal">×</button>
+                                      </div>
+<!--old modal-->
+
+
+                                      <!-- Modal body -->
+                                      <div class="modal-body">
+
+
+
+
+
+
+                                        <div class="row">
+                                          <div class="col-12">
+
+
+                                                     <form method="post" action="../bill_pay_save.php?bill_id=<?php echo $bill_id?>">
+                                                       <input type="hidden" name="year1" value="<?php echo $year; ?>">
+                                                       <input type="hidden" name="month1" value="<?php echo $month; ?>">
+                                                       <div class="container">
+                                                         <div class="row">
+                                                           <div class="col-sm">
+                                                             <label for="obillname">Original Bill ID</label>
+                                                             <p class="text-sm-start"><?php echo $bill_id; ?></p>
+                                                             <input type="hidden" name="obill_id" value="<?php echo $bill_id; ?>">
+
+                                                      </div>
+
+                                                         <div class="col-sm">
+                                                       <label for="accountnumber">Monthly Bill ID</label>
+                                                          <p class="text-sm-start"><?php echo $obill_id;?></p>
+                                                          <input type="hidden" name="mbill_id" value="<?php echo $obill_id;?>">
+
+                                                      </div>
+                                                      </div>
+
+
+
+
+
+                                                         <div class="row">
+                                                           <div class="col-sm">
+                                                             <label for="buser">User Name</label>
+                                                             <p class="text-sm-start"><?php echo $bill_user2;?></p>
+
+                                                     </div>
+
+                                                         <div class="col-sm">
+                                                       <label for="accountnumber">Account Number</label>
+                                                          <p class="text-sm-start" name="bill_account_label"><?php echo $bill_account2;?></p>
+
+                                                     </div>
+                                                     </div>
+
+                                                     <div class="row">
+                                                       <div class="col-sm">
+                                                       <label for="buser">Last Paid Date</label>
+                                                       <p class="text-sm-start"><?php echo $bill_paid_date2;?></p>
+
+                                                     </div>
+
+                                                     <div class="col-sm">
+                                                     <label for="bdate">Due Date</label>
+                                                     <p class="text-sm-start"><?php echo $bill_due_date2;?></p>
+
+                                                     </div>
+                                                     <div class="form-group">
+                                                       <label for="bwebsite">Website Address</label><br>
+                                                      <a href="<?php echo $bill_website2;?>" class="link-info"><?php echo $bill_website2;?></a>
+
+                                                     </div>
+
+
+                                                     <div class="form-group">
+                                                       <label for="bnotess">Notes</label>
+                                                       <textarea class="form-control" name="bnotes" v rows="3"><?php echo $bill_notes;?></textarea>
+                                                     </div>
+
+                                                     </div>
+                                                     <div class="row">
+                                                       <div class="col-sm">
+                                                         <div class="form-outline">
+                                                           <div class="form-floating">
+                                                              <input type="text" class="form-control" placeholder="Amount Paid on Bill" name="ubill_paid_amount" id="ubill_paid_amount" />
+                                                                <label for="floatingTextarea">Enter Amount Paid on Bill</label>
+
+                                                        </div>
+                                                     </div>
+                                                   </div>
+                                                 </div>
+
+                                                     <?php if (isset($_SESSION['success_message']) && !empty($_SESSION['success_message'])) { ?>
+                                                             <div class="alert alert-success" role="alert"><?php echo $_SESSION['success_message']; ?></div>
+                                                               <?php
+                                                               unset($_SESSION['success_message']);
+                                                           }
+                                                           ?>
+
+
+
+                                                 </div>
+
+
+
+                                     </div>
+                                   <!--end of content -->
+                                   </div>
+
+
+
+
+                                      </div>
+
+                                      <!-- Modal footer -->
+                                      <div class="modal-footer">
+
+
+
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                          <input type="submit" class="btn btn-primary" name="save" value="Save"/>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+
+</form>
+                                <?php
+
+
+                            }
 
                             } else {
 
@@ -426,114 +628,8 @@ include_once '../config_save.php';
                 </div>
             </div>
         </div>
-<!-- test-->
-
-<!-- The Modal -->
-<div id="myModal<?php echo $info['itemID']; ?>" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-
-    <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Edit Bill Information <?php echo    "".$bill_id."";?></h6>
-            </div>
-
-    <div class="card-body px-1 pt-1 pb-2">
-                  <form method="post" action="../bill_save.php">
-                    <div class="container">
-                      <div class="row">
-                        <div class="col-sm">
-                    <label for="bname">Bill Name</label>
-                    <input type="text" class="form-control" name="bname" id="bname" value="<?php echo $row['bill_name'];?>" placeholder="Bill Name">
-                  </div>
-
-                      <div class="col-sm">
-                    <label for="accountnumber">Account Number</label>
-                    <input type="text" class="form-control" name="accountnumber" value="<?php echo $row['bill_account'];?>" placeholder="Account Number">
-                  </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm">
-                    <label for="buser">User Name</label>
-                    <input type="text" class="form-control" name="buser" value="<?php echo $row['bill_user'];?>" placeholder="User Name">
-                  </div>
-
-                  <div class="col-sm">
-                  <label for="bdate">Due Date</label>
-                  <select class="form-control" name="bdate">
-                    <option value = "1st">1st</option>
-                    <option value = "15th">15th</option>
-                    <option value selected = "<?php echo $row['bill_due_date'];?>"><?php echo $row['bill_due_date'];?></option>
-
-                  </select>
-
-                  </div>
-                  <div class="form-group">
-                    <label for="bwebsite">Website Address</label>
-                    <input type="text" class="form-control" name="bwebsite" value="<?php echo $row['bill_website'];?>" placeholder=http://billwebsite.com>
-                  </div>
 
 
-                  <div class="form-group">
-                    <label for="bnotes">Notes</label>
-                    <textarea class="form-control" name="bnotes" v rows="3"><?php echo $row['bill_notes'];?></textarea>
-                  </div>
-
-                  </div>
-                  <?php if (isset($_SESSION['success_message']) && !empty($_SESSION['success_message'])) { ?>
-                          <div class="alert alert-success" role="alert"><?php echo $_SESSION['success_message']; ?></div>
-                            <?php
-                            unset($_SESSION['success_message']);
-                        }
-                        ?>
-                      <div class="form-group">
-                          <input type="submit" class="btn btn-primary" name="save" value="Save"/>
-                      </div>
-                  </form>
-
-              </div>
-          </div>
-      </div>
-
-
-  </div>
-<!--end of content -->
-</div>
-
-<script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-</script>
-<!-- test-->
 
 
 
@@ -638,6 +734,20 @@ window.onclick = function(event) {
 
   $('input#txt_query').quicksearch('table#table tbody tr');
 
+</script>
+<script>
+var formatter = new Intl.NumberFormat('en-US', {
+style: 'currency',
+currency: 'USD',
+});
+
+document.querySelector('#ubill_paid_amount').addEventListener('change', (e)=>{
+if(isNaN(e.target.value)){
+    e.target.value = ''
+}else{
+  e.target.value = formatter.format(e.target.value);
+}
+})
 </script>
     </body>
 </html>
