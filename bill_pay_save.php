@@ -22,18 +22,26 @@ $today = date("Y-m-d H:i:s");
 //echo $year."<br>";
 //echo $month."<br>";
 //echo $today."<br>";
-
-mysqli_query($conn, "UPDATE history
+$sql = "UPDATE history
 SET bill_paid_date = '$today', bill_paid_amount = '$paid', bill_notes = '$bnotes'
-WHERE b_id = '$mbill_id' AND Year = '$year ' AND Month  ='$month'");
+WHERE b_id = '$mbill' AND Year = '$year ' AND Month  ='$month'";
 
+mysqli_query($conn, $sql);
+
+$sql2 = "UPDATE default_bills
+SET bill_paid_date = '$today', bill_paid_amount = '$paid', bill_notes = '$bnotes'
+WHERE id_bill = '$obill'";
+
+mysqli_query($conn, $sql2);
 
 
     //Start the session if already not started.
     session_start();
     $_SESSION['success_message'] = "New bill saved successfully.";
-  //  header("Location: pages/bill_report.php");
-  print_r($conn);
+
+    header("Location:".$_SERVER[HTTP_REFERER]."?message=".$message);
+  //print_r($conn);
+
 
     exit();
 } else {
