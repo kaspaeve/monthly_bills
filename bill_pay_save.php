@@ -1,10 +1,10 @@
 <?php
 
 require_once 'config_save.php';
-if (isset($_POST['mbill_id'])) {
+if (isset($_POST['submit_bill'])) {
 
 
-$paid =$_POST['ubill_paid_amount'];
+$paid = $_POST['ubill_paid_amount'];
 $bnotes = $_POST['bnotes'];
 $obill = $_POST['obill_id'];
 $mbill = $_POST['mbill_id'];
@@ -23,13 +23,13 @@ $today = date("Y-m-d H:i:s");
 //echo $month."<br>";
 //echo $today."<br>";
 $sql = "UPDATE history
-SET bill_paid_date = '$today', bill_paid_amount = '$paid', bill_notes = '$bnotes'
+SET bill_paid_date = '$today', bill_paid_amount = '$$paid', bill_notes = '$bnotes'
 WHERE b_id = '$mbill' AND Year = '$year ' AND Month  ='$month'";
 
 mysqli_query($conn, $sql);
 
 $sql2 = "UPDATE default_bills
-SET bill_paid_date = '$today', bill_paid_amount = '$paid', bill_notes = '$bnotes'
+SET bill_paid_date = '$today', bill_paid_amount = '$$paid', bill_notes = '$bnotes'
 WHERE id_bill = '$obill'";
 
 mysqli_query($conn, $sql2);
@@ -37,9 +37,8 @@ mysqli_query($conn, $sql2);
 
     //Start the session if already not started.
     session_start();
-    $_SESSION['success_message'] = "New bill saved successfully.";
-
-    header("Location:".$_SERVER[HTTP_REFERER]."?message=".$message);
+    $_SESSION['success_message'] = "Bill <strong>updated</strong> successfully.";
+    header("Location: pages/bill_report.php?year=$year&month=$month");
   //print_r($conn);
 
 
