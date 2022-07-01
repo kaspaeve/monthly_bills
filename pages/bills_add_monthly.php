@@ -31,13 +31,6 @@
 
        <script src="../bootstrap/js/jquery.quicksearch.js"></script>
 
-       <script src="../assets/js/jquery-1.10.2.js"></script>
-       <script src="../assetsjs/bootstrap.js"></script>
-       <script src="../assetsjs/jquery.selectlistactions.js"></script>
-
-
-       <link rel="stylesheet" href="css/site.css">
-
 <!--verify -->
 <script type="text/javascript">
 function validate()
@@ -262,24 +255,47 @@ function validate()
 
 
 
+                            <div class="form-group input-group">
 
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+
+                              <input name="query" id="txt_query" placeholder="Search" type="text" class="form-control">
+
+                            </div>
 
 <form method="post" action="../bills_add_monthly_submit.php" onsubmit="return validate();">
-  <div class="container">
+
+                            <table id="table" class="table table-hover">
+
+                             <thead>
+
+                                 <tr>
+
+                                   <th>
+                                     Add Monthly Bill
+                                   </th>
+                                     <th>Bill Name</th>
 
 
-		<p>&nbsp;</p>
-		<div class="row style-select">
-			<div class="col-md-12">
-				<div class="subject-info-box-1">
-					<label>Available Bills</label>
-					<select multiple class="form-control" id="lstBox1">
+
+                                     <th>Bill Due Date</th>
+                                     <th>
+                                       Last Paid Amount
+                                     </th>
+                                     <Th>
+                                       Last Paid Date
+                                     </Th>
+                                 <th>
+                                   Bill Notes
+                                 </th>
 
 
 
+                                 </tr>
 
+                             </thead>
 
-
+                            <tbody><tr>
                               <?php
 
 include_once '../config_save.php';
@@ -308,50 +324,24 @@ include_once '../config_save.php';
                                         $bill_paid_amount  = $row['bill_paid_amount'];
                                         $bill_notes  = $row['bill_notes'];
 
-
-                                      echo   "<option value=".$bill_id.">".$bill_name."</option>";
-
-
-
-                              //          echo "<td><input class='form-check-input' type='checkbox' name='bill_list[]' value='".$row['bill_name']."'/></td>";
-                            //            echo    "<td>".$bill_name."</td>";
-                            //            echo    "<td>".$bill_due_date."</td>";
-                            //            echo	 "<td>".$bill_paid_amount."</td>";
-                            //            echo	 "<td>".$bill_paid_date."</td>";
-                            //            echo    "<td>".$bill_notes."</td></tr>";
-
-
-
-
-
-
+                                        echo "<td><input class='form-check-input' type='checkbox' name='bill_list[]' value='".$row['bill_name']."'/></td>";
+                                        echo    "<td>".$bill_name."</td>";
+                                        echo    "<td>".$bill_due_date."</td>";
+                                        echo	 "<td>".$bill_paid_amount."</td>";
+                                        echo	 "<td>".$bill_paid_date."</td>";
+                                        echo    "<td>".$bill_notes."</td></tr>";
                                           }
                                       } else {
                                           echo "0 results";
                                       }
                                       $conn->close();
                                       ?>
-                                    </select>
-                                  </div>
+                                       </tbody>
+                                      </table>
 
-                                  <div class="subject-info-arrows text-center">
-                                    <br /><br />
-                                    <input type='button' id='btnAllRight' value='>>' class="btn btn-default" /><br />
-                                    <input type='button' id='btnRight' value='>' class="btn btn-default" /><br />
-                                    <input type='button' id='btnLeft' value='<' class="btn btn-default" /><br />
-                                    <input type='button' id='btnAllLeft' value='<<' class="btn btn-default" />
-                                  </div>
-
-                                  <div class="subject-info-box-2">
-                                    <label>Selected Bills</label>
-                                    <select multiple class="form-control" id="lstBox2">
-                                    </select>
-                                  </div>
-
-                                  <div class="clearfix"></div>
-                                </div>
-                              </div>
-                            </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
 
                                               <div class = "container"
 
@@ -407,43 +397,13 @@ include_once '../config_save.php';
                                       ?>
                                 <input type="submit" class="btn btn-primary" name="save_multi" value="Create"/>
                             </div>
-
+          
                           </div>
 
                 </div>
             </div>
         </div>
-      </select>
-    </div>
-
-
 </form>
-
-
-
-<script>
-
-
-      $('#btnRight').click(function (e) {
-          $('select').moveToListAndDelete('#lstBox1', '#lstBox2');
-          e.preventDefault();
-      });
-
-      $('#btnAllRight').click(function (e) {
-          $('select').moveAllToListAndDelete('#lstBox1', '#lstBox2');
-          e.preventDefault();
-      });
-
-      $('#btnLeft').click(function (e) {
-          $('select').moveToListAndDelete('#lstBox2', '#lstBox1');
-          e.preventDefault();
-      });
-
-      $('#btnAllLeft').click(function (e) {
-          $('select').moveAllToListAndDelete('#lstBox2', '#lstBox1');
-          e.preventDefault();
-      });
-  </script>
         <!--END CONTENT -->
         <footer class="footer pt-3  ">
           <div class="container-fluid">
