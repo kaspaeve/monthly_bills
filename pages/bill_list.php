@@ -254,7 +254,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                             </div>
 
 
-
+<div class="table-responsive-xl">
                               <table id="table" class="table table-hover table-striped table-condensed tasks-table" >
 
                              <thead>
@@ -380,7 +380,7 @@ include_once '../config_save.php';
 
 
 
-
+</div>
             </div>
         </div>
       </div>

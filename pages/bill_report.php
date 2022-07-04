@@ -158,7 +158,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                 <span class="nav-link-text ms-1">List Bills</span>
               </a>
             </li>
-          
+
 
 
             <li class="nav-item mt-3">
@@ -273,7 +273,7 @@ https://www.w3schools.com/bootstrap/bootstrap_forms.asp-->
                             </div>
 
 
-
+<div class="table-responsive-xl">
                             <table id="table" class="table table-hover">
 
                              <thead>
@@ -607,7 +607,7 @@ $bill_notes2  = $row2['bill_notes'];
                 </div>
             </div>
         </div>
-
+</div>
 
 
 
