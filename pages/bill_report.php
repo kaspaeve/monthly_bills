@@ -497,7 +497,7 @@ $bill_notes2  = $row2['bill_notes'];
                                                      </div>
                                                      <div class="form-group">
                                                        <label for="bwebsite">Website Address</label><br>
-                                                      <a href="<?php echo $bill_website2;?>" class="link-info"><?php echo $bill_website2;?></a>
+                                                      <a href="<?php echo $bill_website2;?>" target="_blank" class="link-info"><?php echo $bill_website2;?></a>
 
                                                      </div>
 

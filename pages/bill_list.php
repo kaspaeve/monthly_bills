@@ -367,12 +367,6 @@ include_once '../config_save.php';
                                       </div>
                                     </div>
 
-
-
-
-
-
-
                                       <?php
                                       unset($_SESSION['success_message']);
                                   }
