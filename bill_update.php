@@ -1,5 +1,3 @@
-
-
 <?php
 //get video info
 session_start();
