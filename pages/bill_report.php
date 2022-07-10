@@ -14,7 +14,9 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- Material Kit CSS -->
   <link href="../assets/css/material/material-kit.css?v=3.0.0" rel="stylesheet" />
-
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link id="pagestyle" href="../assets/css/material-kit.css?v=3.0.4" rel="stylesheet" />
 
 </head>
 
@@ -300,9 +302,6 @@ include_once '../config_save.php';
   <!--  Plugin for Parallax, full documentation here: https://github.com/wagerfield/parallax  -->
   <script src="../assets/js/plugins/parallax.min.js"></script>
   <!-- Control Center for Material UI Kit: parallax effects, scripts for the example pages etc -->
-
-
-<?php include_once '../include/footer.php' ?>
 <script src="../assets/js/material-kit.min.js?v=3.0.4" type="text/javascript"></script>
 <script>
 // get the element to animate
