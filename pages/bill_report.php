@@ -287,11 +287,6 @@ include_once '../config_save.php';
   </div>
 
 <?php include_once '../include/footer.php' ?>
-  <script src="../assets/js/core/bootstrap.bundle.min.js" type="text/javascript"></script>
-  <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
-
-
-
 <!--   Core JS Files   -->
 <script src="../assets/js/core/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
