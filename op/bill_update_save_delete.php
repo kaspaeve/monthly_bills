@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config_save.php';
+require_once '../config_save.php';
   if(isset($_POST['updatebill'])){
 
   $bill_id = $_POST['bill_id'];
