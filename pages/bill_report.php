@@ -1,4 +1,5 @@
-<?php   session_start(); ?>
+<?php   session_start();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,6 +25,7 @@
   <link rel="stylesheet" href="../assets/css/dataTables.bootstrap4.min.css">
   <script src="../assets/js/jquery.dataTables.min.js"></script>
   <script src="../assets/js/dataTables.bootstrap4.min.js"></script>
+
 </head>
 <body>
   <!--  Navbar -->
@@ -63,6 +65,7 @@
     </div>
     <!--end bread-->
     <div class="container">
+      <!--modal open over -->
       <!--testing-->
       <div class="table-responsive-xl">
         <table id="sortTable" class="table table-hover" style="width:100%">
@@ -90,7 +93,6 @@
             include_once '../config_save.php';
             $sql = "SELECT * FROM history WHERE Year = '".$year."' AND Month  ='".$month."'";
             $result = $conn->query($sql);
-            $result = $conn->query($sql);
             if ($result->num_rows > 0) {
               // output data of each row
               while($row = $result->fetch_assoc()) {
@@ -101,7 +103,7 @@
                 $bill_paid_date  = $row['bill_paid_date'];
                 $bill_paid_amount  = $row['bill_paid_amount'];
                 $bill_notes  = $row['bill_notes'];
-                echo "<td><button type='button' class='btn bg-gradient-primary' data-bs-toggle='modal' data-bs-target='#myModal-".$obill_id."'>Pay</a></td>";
+                echo "<td><button type='button' class='btn bg-gradient-primary' data-bs-toggle='modal' data-bs-target='#payBill-".$obill_id."'>Pay</a></td>";
                 echo    "<td>".$bill_name."</td>";
                 echo    "<td>".$bill_due_date."</td>";
                 echo	 "<td>".$bill_paid_amount."</td>";
@@ -109,8 +111,6 @@
                 echo    "<td>".$bill_notes."</td>";
                 echo    "<td>".$bill_id."</td></tr>";
                 //  <!-- test-->
-                $modal = array( 'modal1', 'modal2', 'modal3', 'modal4' );// Set the array
-                $i = $bill_id; // Set the increment variable
                 ?>
                 <!-- The Modal -->
                 <!--data-->
@@ -128,7 +128,6 @@
                 }
                 while ($row2 = mysqli_fetch_assoc($result2)) {
                   $bill_id2        = $row2['id_bill'];
-                  $bill_name2    = $row2['bill_name'];
                   $bill_account2  = $row2['bill_account'];
                   $bill_due_date2     = $row2['bill_due_date'];
                   $bill_user2  = $row2['bill_user'];
@@ -139,19 +138,133 @@
                 }
                 ?>
               </div>
-              <div class="modal fade" id="myModal-<?php echo $obill_id; // Displaying the increment ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <!--edit modal-->
+              <div class="modal" id="edit_bill_id-<?php echo $bill_id; ?>" data-bs-backdrop="static"  tabindex="-1" aria-labelledby="edit_bill" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Pay <?php echo $bill_name2; ?></h5>
-                      <button type="button" class="btn bg-gradient-info w-auto me-2">
+                      <h4 class="modal-title">Edit: <?php echo $bill_name; ?></h4>
+                      <button type="submit" class="btn bg-gradient-danger w-auto me-2" name="delete_bill">
+                        <i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="container">
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" action="../op/report_update_save_delete.php">
+                        <input type="hidden" name="bname" value="<?php echo $bill_name; ?>">
+                        <input type="hidden" name="year1" value="<?php echo $year; ?>">
+                        <input type="hidden" name="month1" value="<?php echo $month; ?>">
+                        <div class="container">
+                              <input type="hidden" id="bill_id" name="bill_id" value="<?php echo $bill_id; ?>">
+                          <div class="row">
+                            <div class="col-lg-4">
+                              <div class="input-group input-group-static mb-4">
+                                <label>Bill Name</label>
+                                <input class="form-control" name="bname" id="bname" value="<?php echo $bill_name;?>" placeholder="Bill Name" type="text" >
+                              </div>
+                            </div>
+                            <div class="col-lg-4">
+                              <div class="input-group input-group-static mb-4">
+                                <label for="accountnumber">Account Number</label>
+                                <input type="text" class="form-control" name="accountnumber" value="<?php echo $bill_account2;?>" placeholder="Account Number">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-4">
+                                <div class="input-group input-group-static mb-4">
+                                  <label for="buser">User Name</label>
+                                  <input type="text" class="form-control" name="buser" value="<?php echo $bill_user2;?>" placeholder="User Name">
+                                </div>
+                              </div>
+                              <div class="col-lg-4">
+                                <div class="input-group input-group-static mb-4">
+                                  <label for="bdate">Due Date</label>
+                                  <select class="form-control " id="bdate" name="bdate">
+                                    <option value selected = "<?php echo $bill_due_date2;?>"><?php echo $bill_due_date2;?></option>
+                                    <option value = "1st">1st</option>
+                                    <option value = "2nd">2nd</option>
+                                    <option value = "3rd">3rd</option>
+                                    <option value = "4th">4th</option>
+                                    <option value = "5th">5th</option>
+                                    <option value = "6th">6th</option>
+                                    <option value = "7th">7th</option>
+                                    <option value = "8th">8th</option>
+                                    <option value = "9th">9th</option>
+                                    <option value = "10th">10th</option>
+                                    <option value = "11th">11th</option>
+                                    <option value = "12th">12th</option>
+                                    <option value = "13th">13th</option>
+                                    <option value = "14th">14th</option>
+                                    <option value = "15th">15th</option>
+                                    <option value = "16th">16th</option>
+                                    <option value = "17th">17th</option>
+                                    <option value = "18th">18th</option>
+                                    <option value = "19th">19th</option>
+                                    <option value = "20th">20th</option>
+                                    <option value = "21st">21st</option>
+                                    <option value = "22nd">22nd</option>
+                                    <option value = "23rd">23rd</option>
+                                    <option value = "24th">24th</option>
+                                    <option value = "25th">25th</option>
+                                    <option value = "26th">26th</option>
+                                    <option value = "27th">27th</option>
+                                    <option value = "28th">28th</option>
+                                    <option value = "29th">29th</option>
+                                    <option value = "30th">30th</option>
+                                    <option value = "31st">32st</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-9">
+                                <div class="input-group input-group-static mb-4">
+                                  <label for="bwebsite">Website Address</label>
+                                  <input type="text" class="form-control" name="bwebsite" value="<?php echo $bill_website2;?>" placeholder=http://billwebsite.com>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-9">
+                                <div class="input-group input-group-static mb-4">
+                                  <label for="bnotes">Notes</label>
+                                  <textarea class="form-control" name="bnotes" v rows="3"><?php echo $bill_notes;?></textarea>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn bg-gradient-dark  w-auto me-2" data-bs-dismiss="modal">Close</button>
+                          <input type="submit" class="btn bg-gradient-primary-custom w-auto me-2" name="updatebill" value="Save changes"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+              <!--end-->
+              <div class="modal" id="payBill-<?php echo $obill_id; // Displaying the increment ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog  modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Pay <?php echo $bill_name; ?></h5>
+<!--second modal button -->
+                      <a data-bs-toggle="modal" href="#edit_bill_id-<?php echo $bill_id; ?>" class="btn bg-gradient-info w-auto me-2">
+                    <!--  <button type="button" class="btn bg-gradient-info w-auto me-2"> -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
                           <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
                         </svg>
+
+                      </a>
+
+<!--end second modal button-->
                       </div>
                       <div class="modal-body">
                         <form method="post" action="../op/report_pay_delete_bill.php">
-                          <input type="hidden" name="bname" value="<?php echo $bill_name2; ?>">
+                          <input type="hidden" name="bname" value="<?php echo $bill_name; ?>">
                           <input type="hidden" name="year1" value="<?php echo $year; ?>">
                           <input type="hidden" name="month1" value="<?php echo $month; ?>">
                           <div class="container">
@@ -194,7 +307,8 @@
                                 <label>Notes</label>
                                 <textarea name="bnotes" class="form-control" id="message" rows="2"><?php echo $bill_notes;?></textarea>
                               </div>
-                              <div class="col-8">
+                              <div class="col-sm">
+                                <label>Amount Paid</label>
                                 <div class="input-group input-group-outline">
                                   <label class="form-label">$</label>
                                   <input type="text" name ="ubill_paid_amount" class="form-control mb-sm-0">
@@ -219,46 +333,13 @@
               ?>
             </tbody>
           </table>
-          <?php if (isset($_SESSION['bill_save_success_message']) && !empty($_SESSION['bill_save_success_message'])) { ?>
-            <hr class="bg-primary border-2 border-top border-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-              <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-              </symbol>
-              <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-              </symbol>
-              <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-              </symbol>
-            </svg>
-            <div class="alert alert-success text-white alert-dismissible d-flex align-items-center fade show" role="alert">
-              <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-              <div>
-                <?php echo $_SESSION['bill_save_success_message']; ?>
-                <button type="button" class="btn-close text-white" data-bs-dismiss="alert"></button>
-              </div>
-            </div>
-            <?php
-            unset($_SESSION['bill_save_success_message']);
-          }
-          ?>
-          <!--delete alert -->
-          <?php if (isset($_SESSION['delete_bill_success_message']) && !empty($_SESSION['delete_bill_success_message'])) { ?>
-            <hr class="bg-primary border-2 border-top border-primary">
-            <div class="alert alert-danger text-white alert-dismissible d-flex align-items-center fade show" role="alert">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-              </svg>
-              <div>
-                <?php echo $_SESSION['delete_bill_success_message']; ?>
-                <button type="button" class="btn-close text-white" data-bs-dismiss="alert"></button>
-              </div>
-            </div>
-            <?php
-            unset($_SESSION['delete_bill_success_message']);
-          }
-          ?>
+<?php
+include_once '../op/functions.php';
+messageAlert("success", "bill_save_success_message");
+messageAlert("danger", "delete_bill_success_message");
+messageAlert("success", "report_update_success_message");
+messageAlert("danger", "report_delete_success_message");
+ ?>
         </div>
       </div>
     </div>
