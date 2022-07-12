@@ -1,3 +1,16 @@
+<?php
+// Initialize the session
+session_start();
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: ../login.php");
+    exit;
+}
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -13,24 +26,27 @@
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- Material Kit CSS -->
-  <link href="../assets/css/material-kit.css?v=3.0.0" rel="stylesheet" />
-  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-    <link id="pagestyle" href="../assets/css/material-kit.css?v=3.0.4" rel="stylesheet" />
+  <link href="../assets/css/material/material-kit.css?v=3.0.0" rel="stylesheet" />
+  <link href="../assets/css/material/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/material/nucleo-svg.css" rel="stylesheet" />
+  <link id="pagestyle" href="../assets/css/material/material-kit.css?v=3.0.4" rel="stylesheet" />
 
-
-
+  <script src="../assets/js/jquery.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../assets/css/dataTables.bootstrap4.min.css">
+  <script src="../assets/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
   <!--  Navbar -->
-<?php include_once '../include/navbar.php'; ?>
+  <?php include_once '../include/navbar.php'; ?>
 
   <!-- End Navbar -->
 
-
-  <div class="page-header min-vh-80" style="background-image: url(&#39;https://images.unsplash.com/photo-1520769945061-0a448c463865?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80&#39;);" loading="lazy">
-    <span class="mask bg-gradient-dark opacity-6"></span>
+  <div class="page-header min-height-400" style="background-image: url(&#39;https://images.unsplash.com/photo-1520769945061-0a448c463865?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80&#39;);" loading="lazy">
+    <span class="mask bg-gradient-dark opacity-8"></span>
     <div class="container">
       <div class="row">
       </div>
@@ -42,165 +58,249 @@
     <div class="container py-6 mt-2">
       <div class="row">
         <nav aria-label="breadcrumb">
-             <ol class="breadcrumb">
-               <li class="breadcrumb-item text-dark opacity-5"><a href="../pages/dashboard.php">Home</a></li>
-               <li class="breadcrumb-item text-dark opacity-5"><a href="javascript">List Bills</a></li>
-             </ol>
-             <h6 class="font-weight-bolder mb-0">List Bills</h6>
-           </nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item text-dark opacity-5"><a href="../pages/dashboard.php">Home</a></li>
+            <li class="breadcrumb-item text-dark opacity-5"><a href="javascript">List Bills</a></li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">List Bills</h6>
+        </nav>
 
       </div>
     </div>
-
     <!--end bread-->
+
     <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-12">
+      <!--testing-->
+      <div class="table-responsive-xl">
+        <table id="sortTable" class="table table-striped table-hover" style="width:100%">
 
+          <thead>
 
+            <tr>
 
+              <th></th>
+              <th>Bill Name</th>
+              <th>Bill Account #</th>
+              <th>Bill User</th>
+              <th>Bill Website</th>
+              <th>Bill Date</th>
+              <th>
+                Last Paid Amount
+              </th>
+              <Th>
+                Last Paid Date
+              </Th>
+              <th>
+                Bill Notes
+              </th>
+              <th>Id</th>
+            </tr>
 
+          </thead>
 
+          <tbody><tr>
+            <?php
 
-<!--testing-->
+            include_once '../config_save.php';
 
+            //      $result = mysqli_query($conn,"SELECT * FROM default_bills");
+            $sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills";
 
-                          <table id="sortTable" class="table table-hover table-striped table-sm tasks-table" style="width:50%" >
-
-                         <thead>
-
-                             <tr>
-
-                                <th></th>
-                                 <th>Bill Name</th>
-                                 <th>Bill Account #</th>
-                                 <th>Bill User</th>
-                                 <th>Bill Website</th>
-                                 <th>Bill Date</th>
-                                 <th>
-                                   Last Paid Amount
-                                 </th>
-                                 <Th>
-                                   Last Paid Date
-                                 </Th>
-                             <th>
-                               Bill Notes
-                             </th>
-                              <th>Id</th>
-
-
-
-                             </tr>
-
-                         </thead>
-
-                        <tbody><tr>
-                          <?php
-
-include_once '../config_save.php';
-
-                    //      $result = mysqli_query($conn,"SELECT * FROM default_bills");
-      $sql = "SELECT id_bill, bill_name, bill_due_date, bill_website, bill_account, bill_user, bill_notes, bill_paid_date, bill_paid_amount FROM default_bills";
-
-      $result = $conn->query($sql);
-
-
-
-      if ($result->num_rows > 0) {
-
-          // output data of each row
-
-          while($row = $result->fetch_assoc()) {
-
-
-                                    $bill_id        = $row['id_bill'];
-                                    $bill_name    = $row['bill_name'];
-                                    $bill_account  = $row['bill_account'];
-                                    $bill_due_date     = $row['bill_due_date'];
-                                    $bill_user  = $row['bill_user'];
-                                    $bill_website        = $row['bill_website'];
-                                    $bill_paid_date  = $row['bill_paid_date'];
-                                    $bill_paid_amount  = $row['bill_paid_amount'];
-                                    $bill_notes  = $row['bill_notes'];
-
-
-                                    echo "<td><a href='bill_update.php?bill_id=".$bill_id."'class='btn btn-primary' role='button'>edit</a></td>";
-                                    echo    "<td>".$bill_name."</td>";
-                                    echo    "<td>".$bill_account."</td>";
-                                    echo    "<td>".$bill_user."</td>";
-                                    echo    "<td>".$bill_website."</td>";
-                                    echo    "<td>".$bill_due_date."</td>";
-                                    echo	 "<td>".$bill_paid_amount."</td>";
-                                    echo	 "<td>".$bill_paid_date."</td>";
-                                    echo    "<td>".$bill_notes."</td>";
-
-                                    echo    "<td>".$bill_id."</td></tr>";
-                            }
-
-                        } else {
-
-                            echo "0 results";
-
-                        }
-
-
-
-                        $conn->close();
-
-                        ?>
-
-                         </tbody>
-
-                        </table>
-                        <hr class="bg-primary border-2 border-top border-primary">
-                        <?php if (isset($_SESSION['success_message']) && !empty($_SESSION['success_message'])) { ?>
-
-
-
-                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                  </symbol>
-                                  <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                                  </symbol>
-                                  <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                  </symbol>
-                                </svg>
-
-
-                                <div class="alert alert-success d-flex align-items-center" role="alert">
-                                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-                                  <div>
-                                    <?php echo $_SESSION['success_message']; ?>
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+              // output data of each row
+              while($row = $result->fetch_assoc()) {
+                $bill_id        = $row['id_bill'];
+                $bill_name    = $row['bill_name'];
+                $bill_account  = $row['bill_account'];
+                $bill_due_date     = $row['bill_due_date'];
+                $bill_user  = $row['bill_user'];
+                $bill_website        = $row['bill_website'];
+                $bill_paid_date  = $row['bill_paid_date'];
+                $bill_paid_amount  = $row['bill_paid_amount'];
+                $bill_notes  = $row['bill_notes'];
+                echo "<td><button type='button' class='btn bg-gradient-info w-auto me-2' data-bs-toggle='modal' data-bs-target='#editModal-".$bill_id."'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pen' viewBox='0 0 16 16'><path d='m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z'/></svg></a></td>";
+                echo    "<td>".$bill_name."</td>";
+                echo    "<td>".$bill_account."</td>";
+                echo    "<td>".$bill_user."</td>";
+                echo    "<td>".$bill_website."</td>";
+                echo    "<td>".$bill_due_date."</td>";
+                echo	 "<td>".$bill_paid_amount."</td>";
+                echo	 "<td>".$bill_paid_date."</td>";
+                echo    "<td>".$bill_notes."</td>";
+                echo    "<td>".$bill_id."</td></tr>";
+                ?>
+                <!-- Modal -->
+                <div class="modal fade" id="editModal-<?php echo $bill_id; // Displaying the increment ?>" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit <?php echo $bill_name ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form method="post" action="../op/bill_update_save_delete.php">
+                          <div class="container">
+                                <input type="hidden" id="bill_id" name="bill_id" value="<?php echo $bill_id; ?>">
+                            <div class="row">
+                              <div class="col-lg-4">
+                                <div class="input-group input-group-static mb-4">
+                                  <label>Bill Name</label>
+                                  <input class="form-control" name="bname" id="bname" value="<?php echo $row['bill_name'];?>" placeholder="Bill Name" type="text" >
+                                </div>
+                              </div>
+                              <div class="col-lg-4">
+                                <div class="input-group input-group-static mb-4">
+                                  <label for="accountnumber">Account Number</label>
+                                  <input type="text" class="form-control" name="accountnumber" value="<?php echo $row['bill_account'];?>" placeholder="Account Number">
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-4">
+                                  <div class="input-group input-group-static mb-4">
+                                    <label for="buser">User Name</label>
+                                    <input type="text" class="form-control" name="buser" value="<?php echo $row['bill_user'];?>" placeholder="User Name">
                                   </div>
                                 </div>
+                                <div class="col-lg-4">
+                                  <div class="input-group input-group-static mb-4">
+                                    <label for="bdate">Due Date</label>
+                                    <select class="form-control" id="bdate" name="bdate">
+                                      <option value selected = "<?php echo $row['bill_due_date'];?>"><?php echo $row['bill_due_date'];?></option>
+                                      <option value = "1st">1st</option>
+                                      <option value = "2nd">2nd</option>
+                                      <option value = "3rd">3rd</option>
+                                      <option value = "4th">4th</option>
+                                      <option value = "5th">5th</option>
+                                      <option value = "6th">6th</option>
+                                      <option value = "7th">7th</option>
+                                      <option value = "8th">8th</option>
+                                      <option value = "9th">9th</option>
+                                      <option value = "10th">10th</option>
+                                      <option value = "11th">11th</option>
+                                      <option value = "12th">12th</option>
+                                      <option value = "13th">13th</option>
+                                      <option value = "14th">14th</option>
+                                      <option value = "15th">15th</option>
+                                      <option value = "16th">16th</option>
+                                      <option value = "17th">17th</option>
+                                      <option value = "18th">18th</option>
+                                      <option value = "19th">19th</option>
+                                      <option value = "20th">20th</option>
+                                      <option value = "21st">21st</option>
+                                      <option value = "22nd">22nd</option>
+                                      <option value = "23rd">23rd</option>
+                                      <option value = "24th">24th</option>
+                                      <option value = "25th">25th</option>
+                                      <option value = "26th">26th</option>
+                                      <option value = "27th">27th</option>
+                                      <option value = "28th">28th</option>
+                                      <option value = "29th">29th</option>
+                                      <option value = "30th">30th</option>
+                                      <option value = "31st">32st</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-9">
+                                  <div class="input-group input-group-static mb-4">
+                                    <label for="bwebsite">Website Address</label>
+                                    <input type="text" class="form-control" name="bwebsite" value="<?php echo $row['bill_website'];?>" placeholder=http://billwebsite.com>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-lg-9">
+                                  <div class="input-group input-group-static mb-4">
+                                    <label for="bnotes">Notes</label>
+                                    <textarea class="form-control" name="bnotes" v rows="3"><?php echo $row['bill_notes'];?></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer justify-content-between">
+                            <input type="submit" class="btn btn-danger w-auto me-2" name="delete_bill" value="Delete"/>
+                            <button type="button" class="btn bg-gradient-dark  w-auto me-2" data-bs-dismiss="modal">Close</button>
+                            <input type="submit" class="btn bg-gradient-primary-custom w-auto me-2" name="updatebill" value="Save changes"/>
 
-                                  <?php
-                                  unset($_SESSION['success_message']);
-                              }
-                              ?>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+              <!--end modal-->
+              <?php
+            }
+          } else {
+            echo "0 results";
+          }
+          $conn->close();
+          ?>
+        </tbody>
+      </table>
 
 
 
-</div>
+
+    <hr class="bg-primary border-2 border-top border-primary">
+    <?php if (isset($_SESSION['update_success_message']) && !empty($_SESSION['update_success_message'])) { ?>
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </symbol>
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </symbol>
+      </svg>
+      <div class="alert alert-success text-white alert-dismissible d-flex align-items-center fade show" role="alert">
+
+    <!--  <div class="alert alert-success text-white d-flex align-items-center" role="alert"> -->
+
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+        <div>
+          <?php echo $_SESSION['update_success_message']; ?>
+ <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
+      </div>
+      <?php
+      unset($_SESSION['update_success_message']);
+    }
+    ?>
+
+    <!--delete alert -->
+    <?php if (isset($_SESSION['delete_success_message']) && !empty($_SESSION['delete_success_message'])) { ?>
+      <div class="alert alert-danger text-white alert-dismissible d-flex align-items-center fade show" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+</svg>
+        <div>
+          <?php echo $_SESSION['delete_success_message']; ?>
+        </div>
+      </div>
+      <?php
+      unset($_SESSION['delete_success_message']);
+    }
+    ?>
+
     </div>
   </div>
-
-
-
-
+</div>
+</div>
 <!--end testing-->
 </div>
 </div>
-    </div>
-  </div>
-  <!--   Core JS Files   -->
-
-
-<?php include_once 'include/footer.php' ?>
+</div>
+</div>
+<!--   Core JS Files   -->
+<?php include_once '../include/footer.php' ?>
 <!--   Core JS Files   -->
 <script src="../assets/js/core/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
@@ -219,93 +319,99 @@ include_once '../config_save.php';
 <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 <script>
+// get the element to animate
+var element = document.getElementById('count-stats');
+var elementHeight = element.clientHeight;
+
+// listen for scroll event and call animate function
+
+document.addEventListener('scroll', animate);
+
+// check if element is in view
+function inView() {
+  // get window height
+  var windowHeight = window.innerHeight;
+  // get number of pixels that the document is scrolled
+  var scrollY = window.scrollY || window.pageYOffset;
+  // get current scroll position (distance from the top of the page to the bottom of the current viewport)
+  var scrollPosition = scrollY + windowHeight;
+  // get element position (distance from the top of the page to the bottom of the element)
+  var elementPosition = element.getBoundingClientRect().top + scrollY + elementHeight;
+
+  // is scroll position greater than element position? (is element in view?)
+  if (scrollPosition > elementPosition) {
+    return true;
+  }
+
+  return false;
+}
+
+var animateComplete = true;
+// animate element when it is in view
+function animate() {
+
+  // is element in view?
+  if (inView()) {
+    if (animateComplete) {
+      if (document.getElementById('state1')) {
+        const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+        if (!countUp.error) {
+          countUp.start();
+        } else {
+          console.error(countUp.error);
+        }
+      }
+      if (document.getElementById('state2')) {
+        const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
+        if (!countUp1.error) {
+          countUp1.start();
+        } else {
+          console.error(countUp1.error);
+        }
+      }
+      if (document.getElementById('state3')) {
+        const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
+        if (!countUp2.error) {
+          countUp2.start();
+        } else {
+          console.error(countUp2.error);
+        };
+      }
+      animateComplete = false;
+    }
+  }
+}
+
+if (document.getElementById('typed')) {
+  var typed = new Typed("#typed", {
+    stringsElement: '#typed-strings',
+    typeSpeed: 90,
+    backSpeed: 90,
+    backDelay: 200,
+    startDelay: 500,
+    loop: true
+  });
+}
+</script>
+<script>
+if (document.getElementsByClassName('page-header')) {
+  window.onscroll = debounce(function() {
+    var scrollPosition = window.pageYOffset;
+    var bgParallax = document.querySelector('.page-header');
+    var oVal = (window.scrollY / 3);
+    bgParallax.style.transform = 'translate3d(0,' + oVal + 'px,0)';
+  }, 6);
+}
+</script>
+<script>
 $('#sortTable').DataTable();
 </script>
-
 <script>
-// get the element to animate
-  var element = document.getElementById('count-stats');
-  var elementHeight = element.clientHeight;
-
-  // listen for scroll event and call animate function
-
-  document.addEventListener('scroll', animate);
-
-  // check if element is in view
-  function inView() {
-    // get window height
-    var windowHeight = window.innerHeight;
-    // get number of pixels that the document is scrolled
-    var scrollY = window.scrollY || window.pageYOffset;
-    // get current scroll position (distance from the top of the page to the bottom of the current viewport)
-    var scrollPosition = scrollY + windowHeight;
-    // get element position (distance from the top of the page to the bottom of the element)
-    var elementPosition = element.getBoundingClientRect().top + scrollY + elementHeight;
-
-    // is scroll position greater than element position? (is element in view?)
-    if (scrollPosition > elementPosition) {
-      return true;
-    }
-
-    return false;
-  }
-
-  var animateComplete = true;
-  // animate element when it is in view
-  function animate() {
-
-    // is element in view?
-    if (inView()) {
-      if (animateComplete) {
-        if (document.getElementById('state1')) {
-          const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
-          if (!countUp.error) {
-            countUp.start();
-          } else {
-            console.error(countUp.error);
-          }
-        }
-        if (document.getElementById('state2')) {
-          const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
-          if (!countUp1.error) {
-            countUp1.start();
-          } else {
-            console.error(countUp1.error);
-          }
-        }
-        if (document.getElementById('state3')) {
-          const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
-          if (!countUp2.error) {
-            countUp2.start();
-          } else {
-            console.error(countUp2.error);
-          };
-        }
-        animateComplete = false;
-      }
-    }
-  }
-
-  if (document.getElementById('typed')) {
-    var typed = new Typed("#typed", {
-      stringsElement: '#typed-strings',
-      typeSpeed: 90,
-      backSpeed: 90,
-      backDelay: 200,
-      startDelay: 500,
-      loop: true
-    });
-  }
-</script>
-<script>
-  if (document.getElementsByClassName('page-header')) {
-    window.onscroll = debounce(function() {
-      var scrollPosition = window.pageYOffset;
-      var bgParallax = document.querySelector('.page-header');
-      var oVal = (window.scrollY / 3);
-      bgParallax.style.transform = 'translate3d(0,' + oVal + 'px,0)';
-    }, 6);
-  }
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".alert").alert('close');
+    }, 10000);
+});
 </script>
 </body>
 
