@@ -25,7 +25,7 @@ if(isset($_POST['updatebill'])){
   session_start();
   $_SESSION['update_success_message'] = "<strong>Success!</strong> $name has been <strong>updated</strong>.";
 
-  header("Location: ../pages/bill_list.php");
+  header("Location: https://bills.theschellers.us/pages/bill_list.php");
   exit();
   //  echo $bill_id."<br>";
   //  echo $name."<br>";

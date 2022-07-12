@@ -9,6 +9,7 @@ if (isset($_POST['submit_bill'])) {
   $year = $_POST['year1'];
   $month = $_POST['month1'];
   $today = date("Y-m-d H:i:s");
+  $bname = $_POST['bname'];
   //$account = mysqli_real_escape_string($conn, $_POST['accountnumber']);
   //echo $paid."<br>";
   //echo $bnotes."<br>";
@@ -27,11 +28,12 @@ if (isset($_POST['submit_bill'])) {
   mysqli_query($conn, $sql2);
   //Start the session if already not started.
   session_start();
-  $_SESSION['success_message'] = "Bill <strong>updated</strong> successfully.";
+  $_SESSION['bill_save_success_message'] = "$bname <strong>updated</strong> successfully.";
   header("Location: https://bills.theschellers.us/pages/bill_report.php?year=$year&month=$month");
   //print_r($conn);
   exit();
 } elseif (isset($_POST['delete_bill'])){
+  $bname = $_POST['bname'];
   $mbill = $_POST['mbill_id'];
   $year = $_POST['year1'];
   $month = $_POST['month1'];
@@ -39,7 +41,7 @@ if (isset($_POST['submit_bill'])) {
   mysqli_query($conn, $sql2);
 
   session_start();
-  $_SESSION['success_message'] = "Bill <strong>deleted</strong> successfully.";
+  $_SESSION['delete_bill_success_message'] = "$bname <strong>deleted</strong> successfully.";
   header("Location: https://bills.theschellers.us/pages/bill_report.php?year=$year&month=$month");
 
 }
