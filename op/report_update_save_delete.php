@@ -10,6 +10,9 @@ if(isset($_POST['updatebill'])){
   $website = $_POST['bwebsite'];
   $notes = $_POST['bnotes'];
   $bdate = $_POST['bdate'];
+  $year = $_POST['year1'];
+  $month = $_POST['month1'];
+
   //inject to default_bills
   $sql2 = "UPDATE default_bills
   SET bill_name = '$name', bill_due_date ='$bdate', bill_website ='$website', bill_account ='$account', bill_user ='$user', bill_notes = '$notes' WHERE id_bill = '$bill_id'";
@@ -18,16 +21,20 @@ if(isset($_POST['updatebill'])){
   $sql = "UPDATE history
   SET bill_date = '$bdate', bill_name ='$name'
   WHERE id_bill = '$bill_id'";
+
   mysqli_query($conn, $sql);
+
   session_start();
-  $_SESSION['update_success_message'] = "<strong>Success!</strong> $name has been <strong>updated</strong>.";
-  header("Location: https://bills.theschellers.us/pages/bill_list.php");
+  $_SESSION['report_update_success_message'] = "<strong>Success!</strong> $name has been <strong>updated</strong>.";
+
+  header("Location: https://bills.theschellers.us/pages/bill_report.php?year=$year&month=$month");
   exit();
   //  echo $bill_id."<br>";
   //  echo $name."<br>";
   //  echo $bill_id2."<br>";
   //  echo $notes."<br>";
   //  echo $bdate."<br>";
+
 } elseif (isset($_POST['delete_bill'])){
   $bill_id = $_POST['bill_id'];
   $name = $_POST['bname'];
@@ -37,8 +44,9 @@ if(isset($_POST['updatebill'])){
   mysqli_query($conn, $sql2);
 
   session_start();
-  $_SESSION['delete_success_message'] = "$name <strong>DELETED</strong> successfully.";
-  header("Location: ../pages/bill_list.php");
+  $_SESSION['report_delete_success_message'] = "$name <strong>DELETED</strong> successfully.";
+  header("Location: https://bills.theschellers.us/pages/bill_report.php?year=$year&month=$month");
+
 }
 else{
   echo "Failed to connect to database: " . mysqli_connect_error();
