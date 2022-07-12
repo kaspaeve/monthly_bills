@@ -1,7 +1,6 @@
 <?php   session_start(); ?>
 <!doctype html>
 <html lang="en">
-
 <head>
   <title>Monthly Bill</title>
   <!-- Required meta tags -->
@@ -26,18 +25,13 @@
   <script src="../assets/js/jquery.dataTables.min.js"></script>
   <script src="../assets/js/dataTables.bootstrap4.min.js"></script>
 </head>
-
 <body>
   <!--  Navbar -->
   <?php include_once '../include/navbar.php';
   if (isset($_POST['generatereport'])) {
-
     $year = ($_POST['year']);
     $month = ($_POST['month']);
-
   } else {
-
-
     $year = ($_GET ['year']);
     $month = ($_GET ['month']);
   }
@@ -65,14 +59,11 @@
           </ol>
           <h6 class="font-weight-bolder mb-0"><?php echo $month. ", "; echo $year."";?> Bills</h6>
         </nav>
-
       </div>
     </div>
     <!--end bread-->
     <div class="container">
-
       <!--testing-->
-
       <div class="table-responsive-xl">
         <table id="sortTable" class="table table-hover" style="width:100%">
           <thead>
@@ -94,7 +85,6 @@
               </th>
             </tr>
           </thead>
-
           <tbody><tr>
             <?php
             include_once '../config_save.php';
@@ -107,23 +97,16 @@
                 $obill_id        = $row['b_id'];
                 $bill_id        = $row['id_bill'];
                 $bill_name    = $row['bill_name'];
-                //  $bill_account  = $row['bill_account'];
                 $bill_due_date     = $row['bill_date'];
-                //  $bill_user  = $row['bill_user'];
-                //  $bill_website        = $row['bill_website'];
                 $bill_paid_date  = $row['bill_paid_date'];
                 $bill_paid_amount  = $row['bill_paid_amount'];
                 $bill_notes  = $row['bill_notes'];
                 echo "<td><button type='button' class='btn bg-gradient-primary' data-bs-toggle='modal' data-bs-target='#myModal-".$obill_id."'>Pay</a></td>";
                 echo    "<td>".$bill_name."</td>";
-                //      echo    "<td>".$bill_account."</td>";
-                //    echo    "<td>".$bill_user."</td>";
-                //    echo    "<td>".$bill_website."</td>";
                 echo    "<td>".$bill_due_date."</td>";
                 echo	 "<td>".$bill_paid_amount."</td>";
                 echo	 "<td>".$bill_paid_date."</td>";
                 echo    "<td>".$bill_notes."</td>";
-                //  echo "<td><a href='myBtn".$bill_id."'class='btn btn-primary' role='button'>Pay</a></td></tr>";
                 echo    "<td>".$bill_id."</td></tr>";
                 //  <!-- test-->
                 $modal = array( 'modal1', 'modal2', 'modal3', 'modal4' );// Set the array
@@ -277,7 +260,6 @@
             unset($_SESSION['delete_bill_success_message']);
           }
           ?>
-
         </div>
       </div>
     </div>
