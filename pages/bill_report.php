@@ -272,7 +272,6 @@
 <!--   Core JS Files   -->
 <script src="../assets/js/core/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
-
 <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
 <!--  Plugin for TypedJS, full documentation here: https://github.com/inorganik/CountUp.js -->
 <script src="../assets/js/plugins/countup.min.js"></script>
@@ -284,7 +283,6 @@
 // get the element to animate
 var element = document.getElementById('count-stats');
 var elementHeight = element.clientHeight;
-
 // listen for scroll event and call animate function
 document.addEventListener('scroll', animate);
 // check if element is in view
@@ -297,7 +295,6 @@ function inView() {
   var scrollPosition = scrollY + windowHeight;
   // get element position (distance from the top of the page to the bottom of the element)
   var elementPosition = element.getBoundingClientRect().top + scrollY + elementHeight;
-
   // is scroll position greater than element position? (is element in view?)
   if (scrollPosition > elementPosition) {
     return true;
@@ -307,7 +304,6 @@ function inView() {
 var animateComplete = true;
 // animate element when it is in view
 function animate() {
-
   // is element in view?
   if (inView()) {
     if (animateComplete) {
@@ -339,7 +335,6 @@ function animate() {
     }
   }
 }
-
 if (document.getElementById('typed')) {
   var typed = new Typed("#typed", {
     stringsElement: '#typed-strings',
@@ -372,5 +367,4 @@ $(document).ready(function() {
 });
 </script>
 </body>
-
 </html>
