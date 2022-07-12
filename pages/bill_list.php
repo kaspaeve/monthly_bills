@@ -4,8 +4,8 @@ session_start();
 
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ../login.php");
-    exit;
+  header("location: ../login.php");
+  exit;
 }
 ?>
 <!doctype html>
@@ -32,7 +32,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   <link rel="stylesheet" href="../assets/css/dataTables.bootstrap4.min.css">
   <script src="../assets/js/jquery.dataTables.min.js"></script>
   <script src="../assets/js/dataTables.bootstrap4.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
   <!--  Navbar -->
@@ -83,7 +83,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
               <th>Id</th>
             </tr>
           </thead>
-        <tbody><tr>
+          <tbody><tr>
             <?php
             include_once '../config_save.php';
             //      $result = mysqli_query($conn,"SELECT * FROM default_bills");
@@ -123,7 +123,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                       <div class="modal-body">
                         <form method="post" action="../op/bill_update_save_delete.php">
                           <div class="container">
-                                <input type="hidden" id="bill_id" name="bill_id" value="<?php echo $bill_id; ?>">
+                            <input type="hidden" id="bill_id" name="bill_id" value="<?php echo $bill_id; ?>">
                             <div class="row">
                               <div class="col-lg-4">
                                 <div class="input-group input-group-static mb-4">
@@ -214,21 +214,21 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 </div>
               </div>
             </form>
-              <!--end modal-->
-              <?php
-            }
-          } else {
-            echo "0 results";
+            <!--end modal-->
+            <?php
           }
-          $conn->close();
-          ?>
-        </tbody>
-      </table>
-      <?php
-      messageAlert("success", "update_success_message");
-      messageAlert("danger", "delete_success_message"); ?>
-    </div>
+        } else {
+          echo "0 results";
+        }
+        $conn->close();
+        ?>
+      </tbody>
+    </table>
+    <?php
+    messageAlert("success", "update_success_message");
+    messageAlert("danger", "delete_success_message"); ?>
   </div>
+</div>
 </div>
 </div>
 <!--end testing-->
@@ -342,9 +342,9 @@ $('#sortTable').DataTable();
 </script>
 <script>
 $(document).ready(function() {
-    setTimeout(function() {
-        $(".alert").alert('close');
-    }, 10000);
+  setTimeout(function() {
+    $(".alert").alert('close');
+  }, 10000);
 });
 </script>
 </body>
