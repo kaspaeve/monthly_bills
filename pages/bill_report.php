@@ -122,7 +122,6 @@
                   echo "Could not successfully run query ($sql2) from DB: " . mysqli_errno();
                   exit;
                 }
-
                 if (mysqli_num_rows($result2) == 0) {
                   echo "No rows found, nothing to print so am exiting";
                   exit;
@@ -281,16 +280,13 @@
 <script src="../assets/js/plugins/parallax.min.js"></script>
 <!-- Control Center for Material UI Kit: parallax effects, scripts for the example pages etc -->
 <script src="../assets/js/material-kit.min.js?v=3.0.4" type="text/javascript"></script>
-
 <script>
 // get the element to animate
 var element = document.getElementById('count-stats');
 var elementHeight = element.clientHeight;
 
 // listen for scroll event and call animate function
-
 document.addEventListener('scroll', animate);
-
 // check if element is in view
 function inView() {
   // get window height
@@ -306,10 +302,8 @@ function inView() {
   if (scrollPosition > elementPosition) {
     return true;
   }
-
   return false;
 }
-
 var animateComplete = true;
 // animate element when it is in view
 function animate() {
