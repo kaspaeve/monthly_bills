@@ -1,7 +1,6 @@
 
 
 <?php
-//get video info
 session_start();
     // sending query
 
@@ -377,6 +376,9 @@ $bill_notes  = $row['bill_notes'];
           </div>
       </div>
   </div>
+
+
+
 
           <!--END CONTENT -->
           <footer class="footer pt-3  ">

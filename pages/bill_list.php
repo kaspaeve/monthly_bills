@@ -203,9 +203,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             </div>
                           </div>
                           <div class="modal-footer justify-content-between">
-                            <input type="submit" class="btn btn-danger w-auto me-2" name="delete_bill" value="Delete"/>
+                            <input type="submit" class="btn btn-danger w-auto me-2" name="delete_bill_list" value="Delete"/>
                             <button type="button" class="btn bg-gradient-dark  w-auto me-2" data-bs-dismiss="modal">Close</button>
-                            <input type="submit" class="btn bg-gradient-primary-custom w-auto me-2" name="updatebill" value="Save changes"/>
+                            <input type="submit" class="btn bg-gradient-primary-custom w-auto me-2" name="updatebill_list" value="Save changes"/>
                           </div>
                         </div>
                       </div>
