@@ -37,6 +37,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <body>
   <!--  Navbar -->
   <?php include_once '../include/navbar.php'; ?>
+      <?php include_once '../op/functions.php'; ?>
   <!-- End Navbar -->
   <div class="page-header min-height-400" style="background-image: url(&#39;https://images.unsplash.com/photo-1520769945061-0a448c463865?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80&#39;);" loading="lazy">
     <span class="mask bg-gradient-dark opacity-8"></span>
@@ -121,7 +122,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form method="post" action="../op/bill_update_save_delete.php">
+                        <form method="post" action="../op/updates.php">
                           <div class="container">
                             <input type="hidden" id="bill_id" name="bill_id" value="<?php echo $bill_id; ?>">
                             <div class="row">
