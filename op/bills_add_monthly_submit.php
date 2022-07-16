@@ -7,7 +7,7 @@ if(isset($_POST['save_multi']))
     $bill_list = $_POST['bill_list'];
     $bill_list2 = $_POST['lstBox2'];
     $year = ($_POST['year']);
-    $month = ($_POST['month']);
+    $month = ($_POST['create_month']);
     foreach($bill_list as $bills)
     {
       $sql2 = "SELECT * FROM default_bills WHERE id_bill = '".$bills."'";
