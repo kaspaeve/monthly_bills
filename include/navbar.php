@@ -31,7 +31,7 @@
               <li class="nav-item ms-lg-auto my-auto ms-3 ms-lg-0 mt-2 mt-lg-0">
                 <button type="button" class="btn btn-sm  bg-gradient-primary mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="collapse" data-bs-target="#demo">View Report</button>
                 <div id="demo" class="collapse">
-                  <form method="post" action="bill_report.php" onsubmit="return validate();">
+                  <form method="post" action="bill_report.php">
                     <div class="row mt-4">
                       <div class="card">
                         <div class="card-body p-3">
